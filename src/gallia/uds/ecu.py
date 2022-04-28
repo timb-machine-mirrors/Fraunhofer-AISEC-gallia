@@ -6,7 +6,7 @@ from __future__ import annotations
 
 import asyncio
 from datetime import datetime, timezone
-from typing import Optional, Union
+from typing import Any, Optional, Union
 
 from gallia.db.db_handler import DBHandler, LogMode
 from gallia.penlab import PowerSupply
@@ -64,7 +64,7 @@ class ECU(UDSClient):
 
     async def properties(
         self, fresh: bool = False, config: Optional[UDSRequestConfig] = None
-    ) -> dict:
+    ) -> dict[str, Any]:
         return {}
 
     async def ping(
@@ -219,7 +219,7 @@ class ECU(UDSClient):
         Returns:
             True on success, False on error.
         """
-        resp = await self.ecu_reset(0x01)
+        resp: service.UDSResponse = await self.ecu_reset(0x01)
         if isinstance(resp, service.NegativeResponse):
             await self.power_cycle()
         else:
@@ -230,7 +230,7 @@ class ECU(UDSClient):
             return await self.power_cycle()
         return True
 
-    async def find_sessions(self, search: list, max_retry: int = 4) -> list[int]:
+    async def find_sessions(self, search: list[int], max_retry: int = 4) -> list[int]:
         sessions = []
         for sid in search:
             try:
@@ -311,16 +311,10 @@ class ECU(UDSClient):
         resp = await self.request_transfer_exit(config=config)
         raise_for_error(resp)
 
-    async def wait_for_ecu(self, timeout: float = 60) -> bool:
+    async def wait_for_ecu(self, timeout: float = 60) -> None:
         """wait for ecu to be alive again (eg. after reset)
         Wait at most timeout"""
-        ret = False
-        try:
-            await asyncio.wait_for(self._wait_for_ecu(), timeout=timeout)
-            ret = True
-        except asyncio.TimeoutError:
-            self.logger.log_critical("Timeout while waiting for ECU!")
-        return ret
+        await asyncio.wait_for(self._wait_for_ecu(), timeout=timeout)
 
     async def _wait_for_ecu(self) -> None:
         """wait for ecu to be alive again (eg. after reset)
