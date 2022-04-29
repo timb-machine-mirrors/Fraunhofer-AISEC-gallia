@@ -7,7 +7,7 @@ import sys
 import time
 import traceback
 from abc import ABC, abstractmethod
-from argparse import ArgumentDefaultsHelpFormatter, Namespace
+from argparse import ArgumentParser, Namespace
 from asyncio import Task
 from datetime import datetime, timezone
 from enum import Enum, IntEnum
@@ -15,7 +15,7 @@ from importlib.metadata import EntryPoint, entry_points, version
 from pathlib import Path
 from secrets import token_urlsafe
 from tempfile import gettempdir
-from typing import Any, Optional, cast
+from typing import Optional, cast
 
 import aiofiles
 import argcomplete
@@ -41,15 +41,6 @@ class ExitCodes(IntEnum):
 class FileNames(Enum):
     PROPERTIES_PRE = "PROPERTIES_PRE.json"
     PROPERTIES_POST = "PROPERTIES_POST.json"
-
-
-class Formatter(ArgumentDefaultsHelpFormatter):
-    def __init__(self, *args: Any, **kwargs: Any) -> None:
-        # This is for steff.
-        help_width = os.getenv("GALLIA_HELP_WIDTH")
-        if help_width is not None:
-            kwargs["width"] = int(help_width)
-        super().__init__(*args, **kwargs)
 
 
 def load_transport(target: TargetURI) -> BaseTransport:
@@ -104,14 +95,17 @@ class GalliaBase(ABC):
     The main entry_point is `run()`.
     """
 
-    def __init__(self) -> None:
-        self.description = self.__class__.__doc__
+    ID: str
+    SHORT_HELP: str
+
+    def __init__(self, parser: ArgumentParser) -> None:
+        self.parser: ArgumentParser
+        self.id = camel_to_snake(self.__class__.__name__)
         self.logger = Logger(component="gallia", flush=True)
         self.db_handler: Optional[DBHandler] = None
         self.parser = argparse.ArgumentParser(
             description=self.description, formatter_class=Formatter
         )
-        self.id = camel_to_snake(self.__class__.__name__)
         self.add_class_parser()
         self.add_parser()
 
@@ -183,8 +177,8 @@ class Scanner(GalliaBase, ABC):
     - `main()` is the relevant entry_point for the scanner and must be implemented.
     """
 
-    def __init__(self) -> None:
-        super().__init__()
+    def __init__(self, parser: ArgumentParser) -> None:
+        super().__init__(parser)
         self.artifacts_dir: Path
         self.power_supply: Optional[PowerSupply] = None
         self.dumpcap: Optional[Dumpcap] = None
@@ -370,8 +364,8 @@ class UDSScanner(Scanner):
     - A background tasks sends TesterPresent regularly to avoid timeouts.
     """
 
-    def __init__(self) -> None:
-        super().__init__()
+    def __init__(self, parser: ArgumentParser) -> None:
+        super().__init__(parser)
         self.ecu: ECU
         self.transport: BaseTransport
         self.tester_present_task: Optional[Task] = None
