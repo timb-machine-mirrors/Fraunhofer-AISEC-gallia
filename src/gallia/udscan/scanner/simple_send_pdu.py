@@ -16,7 +16,7 @@ from gallia.udscan.core import UDSScanner
 from gallia.utils import auto_int, g_repr
 
 
-class SendPDU(UDSScanner):
+class SimpleSendPDU(UDSScanner):
     """A raw scanner to send a plain pdu"""
 
     def add_parser(self) -> None:

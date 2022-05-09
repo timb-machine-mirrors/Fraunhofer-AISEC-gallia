@@ -10,8 +10,8 @@ from gallia.udscan.core import UDSScanner
 from gallia.utils import auto_int, g_repr
 
 
-class DTCScanner(UDSScanner):
-    """cmd_dtc"""
+class SimpleDTC(UDSScanner):
+    """Read out UDS DTCs"""
 
     def add_parser(self) -> None:
         self.parser.set_defaults(properties=False)

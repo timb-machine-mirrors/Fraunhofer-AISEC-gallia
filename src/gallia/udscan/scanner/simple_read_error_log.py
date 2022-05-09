@@ -6,7 +6,7 @@ from gallia.udscan.core import UDSScanner
 from gallia.utils import auto_int, g_repr
 
 
-class ReadErrorLog(UDSScanner):
+class SimpleReadErrorLog(UDSScanner):
     """read_error_log"""
 
     def add_parser(self) -> None:

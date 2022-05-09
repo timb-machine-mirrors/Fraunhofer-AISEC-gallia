@@ -8,7 +8,7 @@ from gallia.udscan.core import UDSScanner
 from gallia.utils import auto_int, g_repr
 
 
-class WriteMemoryByAddressScanner(UDSScanner):
+class SimpleWMBA(UDSScanner):
     """Write memory by address"""
 
     def add_parser(self) -> None:

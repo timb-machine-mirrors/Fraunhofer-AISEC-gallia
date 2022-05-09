@@ -28,7 +28,7 @@ class ScanServices(UDSScanner):
             "--check-session",
             action="store_true",
             default=False,
-            help="check current session with read DID",
+            help="check current session",
         )
         self.parser.add_argument(
             "--scan-response-ids",

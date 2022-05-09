@@ -6,8 +6,8 @@ from gallia.udscan.core import UDSScanner
 from gallia.utils import auto_int, g_repr
 
 
-class EcuReset(UDSScanner):
-    """ECU_Reset"""
+class SimpleECUReset(UDSScanner):
+    """Call the ecu_reset service"""
 
     def add_parser(self) -> None:
         self.parser.set_defaults(properties=False)

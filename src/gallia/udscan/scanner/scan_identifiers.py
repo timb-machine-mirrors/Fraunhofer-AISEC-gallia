@@ -15,10 +15,11 @@ from gallia.utils import ParseSkips, auto_int, g_repr
 
 
 class ScanIdentifiers(UDSScanner):
-    """This scanner scans DataIdentifiers of various
-    services. Specific requirements such as for RoutineControl or SecurityAccess
-    are considered and implemented in the script.
+    HELP = """This scanner scans DataIdentifiers of various
+        services. Specific requirements such as for RoutineControl or SecurityAccess
+        are considered and implemented in the script.
     """
+    SHORT_HELP = "Scan DataIdentifiers of various services"
 
     def add_parser(self) -> None:
         self.parser.add_argument(

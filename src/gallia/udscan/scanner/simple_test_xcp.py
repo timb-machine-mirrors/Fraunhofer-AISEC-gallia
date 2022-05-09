@@ -5,7 +5,7 @@ from gallia.udscan.core import Scanner, load_transport
 from gallia.utils import catch_and_log_exception
 
 
-class TestXCP(Scanner):
+class SimpleTestXCP(Scanner):
     """Test XCP Slave"""
 
     def add_parser(self) -> None:

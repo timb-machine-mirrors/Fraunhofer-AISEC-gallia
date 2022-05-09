@@ -7,7 +7,7 @@ from gallia.udscan.core import UDSScanner
 from gallia.utils import auto_int, g_repr
 
 
-class IOCBI(UDSScanner):
+class SimpleIOCBI(UDSScanner):
     """Input output control"""
 
     def add_parser(self) -> None:

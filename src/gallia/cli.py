@@ -7,7 +7,6 @@ from typing import Any
 
 import argcomplete
 
-from gallia.utils import camel_to_dash
 from gallia.udscan.scanner.find_can_ids import FindCanIDsScanner
 from gallia.udscan.scanner.find_endpoints import FindEndpoints
 from gallia.udscan.scanner.find_iso_tp_addr import FindISOTPAddr
@@ -30,7 +29,7 @@ from gallia.udscan.scanner.simple_send_pdu import SimpleSendPDU
 from gallia.udscan.scanner.simple_test_xcp import SimpleTestXCP
 from gallia.udscan.scanner.simple_wmba import SimpleWMBA
 from gallia.udscan.scanner.simple_write_by_identifier import WriteByIdentifier
-
+from gallia.utils import camel_to_dash
 
 # TODO: Rename classes: SimpleFoo…
 # TODO: Create groups: simple, scanner, discover
@@ -83,9 +82,10 @@ def get_help(cls: type) -> str:
 def load_plugins() -> None:
     global registry
 
-    all_entries = entry_points()
-    for entry in all_entries["gallia_commands"]:
-        registry.append(entry.load())
+    eps = entry_points()
+    if "gallia_commands" in eps:
+        for entry in eps["gallia_commands"]:
+            registry.append(entry.load())
 
 
 def main() -> None:

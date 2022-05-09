@@ -7,7 +7,7 @@ from gallia.udscan.core import UDSScanner
 from gallia.utils import auto_int
 
 
-class Ping(UDSScanner):
+class SimplePing(UDSScanner):
     """Ping ECU via Tester Present"""
 
     def add_parser(self) -> None:

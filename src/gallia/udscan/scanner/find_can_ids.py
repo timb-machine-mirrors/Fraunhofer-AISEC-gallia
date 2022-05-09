@@ -12,11 +12,13 @@ from gallia.utils import auto_int, can_id_repr, g_repr, write_target_list
 
 
 class FindCanIDsScanner(DiscoveryScanner):
-    """This scanner discovers all UDS endpoints on a ECU using ISO-TP normal addressing.
+    ID = "find-can-ids"
+    HELP = """This scanner discovers all UDS endpoints on a ECU using ISO-TP normal addressing.
     This is the default protocol used by OBD.
     When using normal addressing, the ISO-TP header does not include an address and there is no generic tester address.
     Addressing is only done via CAN IDs. Every endpoint has a source and destination CAN ID.
     Typically, there is also a broadcast destination ID to address all endpoints."""
+    SHORT_HELP = "Discover all UDS endpoints using ISO-TP normal addressing"
 
     def add_parser(self) -> None:
         self.parser.add_argument(

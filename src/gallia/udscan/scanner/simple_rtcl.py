@@ -9,7 +9,7 @@ from gallia.udscan.core import UDSScanner
 from gallia.utils import auto_int, g_repr
 
 
-class RTCL(UDSScanner):
+class SimpleRTCL(UDSScanner):
     """Start or stop a provided routine or request its results"""
 
     def add_parser(self) -> None:

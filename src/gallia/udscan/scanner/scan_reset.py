@@ -13,7 +13,7 @@ from gallia.utils import ParseSkips, auto_int, g_repr
 
 
 class ScanReset(UDSScanner):
-    """cmd_scan_reset"""
+    """Scan ecu_reset"""
 
     def add_parser(self) -> None:
         self.parser.add_argument(

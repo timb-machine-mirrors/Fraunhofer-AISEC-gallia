@@ -3,7 +3,7 @@ import binascii
 import os
 import sys
 import time
-from argparse import Namespace
+from argparse import ArgumentParser, Namespace
 from pathlib import Path
 from typing import Optional
 
@@ -18,8 +18,8 @@ from gallia.utils import auto_int, g_repr
 class SaDumpSeeds(UDSScanner):
     """This scanner tries to enable ProgrammingSession and dump seeds for 12h."""
 
-    def __init__(self) -> None:
-        super().__init__()
+    def __init__(self, parser: ArgumentParser) -> None:
+        super().__init__(parser)
 
         self.implicit_logging = False
 

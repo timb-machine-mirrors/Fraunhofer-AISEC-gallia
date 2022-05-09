@@ -14,7 +14,7 @@ from gallia.udscan.core import UDSScanner
 from gallia.utils import auto_int, g_repr
 
 
-class IterateSessions(UDSScanner):
+class ScanSessions(UDSScanner):
     """Iterate Sessions"""
 
     def add_parser(self) -> None:

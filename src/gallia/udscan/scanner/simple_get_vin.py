@@ -4,7 +4,7 @@ from gallia.uds.core.service import NegativeResponse
 from gallia.udscan.core import UDSScanner
 
 
-class GetVin(UDSScanner):
+class SimpleGetVin(UDSScanner):
     """Request VIN"""
 
     def add_parser(self) -> None:

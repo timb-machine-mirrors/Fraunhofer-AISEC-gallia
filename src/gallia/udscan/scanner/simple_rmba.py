@@ -6,7 +6,7 @@ from gallia.udscan.core import UDSScanner
 from gallia.utils import auto_int, g_repr
 
 
-class ReadMemoryByAddressScanner(UDSScanner):
+class SimpleRMBA(UDSScanner):
     """Read memory by address"""
 
     def add_parser(self) -> None:

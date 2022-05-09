@@ -11,11 +11,12 @@ from gallia.udscan.core import UDSScanner
 from gallia.utils import auto_int, g_repr
 
 
-class ScanWriteDataByAddress(UDSScanner):
-    """This scanner scans functions with direct access to memory.
-    Specifically, these are service 0x3d WriteMemoryByAddress, 0x34 RequestDownload
-    and 0x35 RequestUpload, which all share the same packet structure, except for
-    0x3d which requires an additional data field.
+class ScanMemoryFunctions(UDSScanner):
+    SHORT_HELP = "Scan functions with direct access to memory"
+    HELP = """This scanner scans functions with direct access to memory.
+        Specifically, these are service 0x3d WriteMemoryByAddress, 0x34 RequestDownload
+        and 0x35 RequestUpload, which all share the same packet structure, except for
+        0x3d which requires an additional data field.
     """
 
     def add_parser(self) -> None:
