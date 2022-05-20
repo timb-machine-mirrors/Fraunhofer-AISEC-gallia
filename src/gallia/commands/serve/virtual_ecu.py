@@ -18,12 +18,19 @@ from gallia.uds.core.server import (
     UDSServer,
     UDSServerTransport,
 )
-from gallia.udscan.core import AsyncScript
+from gallia.command import AsyncScript
 
 dynamic_attr_prefix = "dynamic_attr_"
 
 
 class VirtualECU(AsyncScript):
+    """Spawn a virtual ECU for testing purposes"""
+
+    COMMAND = "vecu"
+    CATEGORY = "serve"
+    SUBCATEGORY = None
+    SHORT_HELP = "Spawn a virtual ECU for testing purposes"
+
     def add_parser(self) -> None:
         self.parser.add_argument(
             "target",

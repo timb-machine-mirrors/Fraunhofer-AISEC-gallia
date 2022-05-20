@@ -4,22 +4,26 @@ import reprlib
 from argparse import Namespace
 from itertools import product
 
+from gallia.command import UDSScanner
 from gallia.uds.core.client import UDSRequestConfig
 from gallia.uds.core.constants import RCSubFuncs, UDSErrorCodes, UDSIsoServices
 from gallia.uds.core.exception import IllegalResponse
 from gallia.uds.core.service import NegativeResponse, UDSResponse
 from gallia.uds.core.utils import service_repr
 from gallia.uds.helpers import suggests_service_not_supported
-from gallia.udscan.core import UDSScanner
 from gallia.utils import ParseSkips, auto_int, g_repr
 
 
 class ScanIdentifiers(UDSScanner):
-    HELP = """This scanner scans DataIdentifiers of various
-        services. Specific requirements such as for RoutineControl or SecurityAccess
-        are considered and implemented in the script.
+    """This scanner scans DataIdentifiers of various
+    services. Specific requirements such as for RoutineControl or SecurityAccess
+    are considered and implemented in the script.
     """
-    SHORT_HELP = "Scan DataIdentifiers of various services"
+
+    CATEGORY = "scan"
+    SUBCATEGORY = "uds"
+    COMMAND = "identifiers"
+    SHORT_HELP = "scan DataIdentifiers of various services"
 
     def add_parser(self) -> None:
         self.parser.add_argument(

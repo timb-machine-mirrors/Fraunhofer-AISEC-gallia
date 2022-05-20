@@ -3,6 +3,7 @@ import sys
 from argparse import Namespace
 from typing import Union
 
+from gallia.command import UDSScanner
 from gallia.uds.core.client import UDSRequestConfig
 from gallia.uds.core.constants import UDSErrorCodes
 from gallia.uds.core.service import (
@@ -10,12 +11,16 @@ from gallia.uds.core.service import (
     NegativeResponse,
     UDSResponse,
 )
-from gallia.udscan.core import UDSScanner
 from gallia.utils import auto_int, g_repr
 
 
 class ScanSessions(UDSScanner):
     """Iterate Sessions"""
+
+    CATEGORY = "scan"
+    SUBCATEGORY = "uds"
+    COMMAND = "sessions"
+    SHORT_HELP = "iterate sessions"
 
     def add_parser(self) -> None:
         self.parser.add_argument(

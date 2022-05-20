@@ -4,16 +4,21 @@ import sys
 from argparse import Namespace
 from typing import Any
 
+from gallia.command import UDSScanner
 from gallia.uds.core.client import UDSRequestConfig
 from gallia.uds.core.exception import IllegalResponse, UnexpectedNegativeResponse
 from gallia.uds.core.service import NegativeResponse, UDSResponse
 from gallia.uds.helpers import suggests_sub_function_not_supported
-from gallia.udscan.core import UDSScanner
 from gallia.utils import ParseSkips, auto_int, g_repr
 
 
-class ScanReset(UDSScanner):
+class ResetScanner(UDSScanner):
     """Scan ecu_reset"""
+
+    SHORT_HELP = "scan ecu_reset service"
+    CATEGORY = "scan"
+    SUBCATEGORY = "uds"
+    COMMAND = "reset"
 
     def add_parser(self) -> None:
         self.parser.add_argument(

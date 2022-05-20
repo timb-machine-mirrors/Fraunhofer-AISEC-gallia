@@ -1,15 +1,12 @@
 from argparse import Namespace
 
+from gallia.command import Scanner, load_transport
 from gallia.services.xcp import XCPService
-from gallia.udscan.core import Scanner, load_transport
 from gallia.utils import catch_and_log_exception
 
 
 class SimpleTestXCP(Scanner):
     """Test XCP Slave"""
-
-    def add_parser(self) -> None:
-        pass
 
     async def main(self, args: Namespace) -> None:
         transport = load_transport(args.target)

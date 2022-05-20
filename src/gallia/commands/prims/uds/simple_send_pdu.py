@@ -2,6 +2,7 @@ import binascii
 import sys
 from argparse import Namespace
 
+from gallia.command import UDSScanner
 from gallia.uds.core.client import UDSRequestConfig
 from gallia.uds.core.exception import UDSException
 from gallia.uds.core.service import (
@@ -12,12 +13,16 @@ from gallia.uds.core.service import (
     UDSResponse,
 )
 from gallia.uds.helpers import raise_for_error
-from gallia.udscan.core import UDSScanner
 from gallia.utils import auto_int, g_repr
 
 
 class SimpleSendPDU(UDSScanner):
     """A raw scanner to send a plain pdu"""
+
+    CATEGORY = "prims"
+    SUBCATEGORY = "uds"
+    COMMAND = "send-pdu"
+    SHORT_HELP = "send a plain pdu"
 
     def add_parser(self) -> None:
         self.parser.set_defaults(properties=False)

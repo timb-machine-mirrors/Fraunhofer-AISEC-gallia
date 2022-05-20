@@ -3,22 +3,25 @@ from argparse import Namespace
 from binascii import unhexlify
 from typing import Optional
 
+from gallia.command import DiscoveryScanner
 from gallia.transports.base import TargetURI
 from gallia.transports.can import ISOTPTransport, RawCANTransport
-from gallia.uds.core.service import UDSRequest, NegativeResponse
 from gallia.uds.core.client import UDSClient
-from gallia.udscan.core import DiscoveryScanner
+from gallia.uds.core.service import NegativeResponse, UDSRequest
 from gallia.utils import auto_int, can_id_repr, g_repr, write_target_list
 
 
 class FindCanIDsScanner(DiscoveryScanner):
-    ID = "find-can-ids"
-    HELP = """This scanner discovers all UDS endpoints on a ECU using ISO-TP normal addressing.
+    """This scanner discovers all UDS endpoints on a ECU using ISO-TP normal addressing.
     This is the default protocol used by OBD.
     When using normal addressing, the ISO-TP header does not include an address and there is no generic tester address.
     Addressing is only done via CAN IDs. Every endpoint has a source and destination CAN ID.
     Typically, there is also a broadcast destination ID to address all endpoints."""
-    SHORT_HELP = "Discover all UDS endpoints using ISO-TP normal addressing"
+
+    CATEGORY = "discover"
+    SUBCATEGORY = "uds"
+    COMMAND = "can-ids"
+    SHORT_HELP = "Discover all UDS endpoints using ISO-TP"
 
     def add_parser(self) -> None:
         self.parser.add_argument(

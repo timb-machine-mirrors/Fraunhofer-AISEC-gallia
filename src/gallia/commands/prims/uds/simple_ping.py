@@ -2,13 +2,18 @@ import asyncio
 import sys
 from argparse import Namespace
 
+from gallia.command import UDSScanner
 from gallia.uds.core.service import NegativeResponse
-from gallia.udscan.core import UDSScanner
 from gallia.utils import auto_int
 
 
 class SimplePing(UDSScanner):
     """Ping ECU via Tester Present"""
+
+    CATEGORY = "prims"
+    SUBCATEGORY = "uds"
+    COMMAND = "ping"
+    SHORT_HELP = "ping ecu via tester present"
 
     def add_parser(self) -> None:
         self.parser.set_defaults(properties=False)

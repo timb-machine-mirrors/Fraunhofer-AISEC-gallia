@@ -1,11 +1,16 @@
 from argparse import Namespace
 
 from gallia.uds.core.service import NegativeResponse
-from gallia.udscan.core import UDSScanner
+from gallia.command import UDSScanner
 
 
 class SimpleGetVin(UDSScanner):
     """Request VIN"""
+
+    CATEGORY = "prims"
+    SUBCATEGORY = "uds"
+    COMMAND = "vin"
+    SHORT_HELP = "request vin"
 
     def add_parser(self) -> None:
         self.parser.set_defaults(properties=False)

@@ -3,13 +3,18 @@ import sys
 from argparse import Namespace
 from pathlib import Path
 
+from gallia.command import UDSScanner
 from gallia.uds.core.service import NegativeResponse
-from gallia.udscan.core import UDSScanner
 from gallia.utils import auto_int, g_repr
 
 
 class SimpleWMBA(UDSScanner):
     """Write memory by address"""
+
+    COMMAND = "wmby"
+    CATEGORY = "prims"
+    SUBCATEGORY = "uds"
+    SHORT_HELP = "write memory by address"
 
     def add_parser(self) -> None:
         self.parser.add_argument(

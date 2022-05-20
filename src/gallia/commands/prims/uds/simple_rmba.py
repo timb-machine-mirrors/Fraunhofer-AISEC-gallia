@@ -1,13 +1,18 @@
 import sys
 from argparse import Namespace
 
+from gallia.command import UDSScanner
 from gallia.uds.core.service import NegativeResponse
-from gallia.udscan.core import UDSScanner
 from gallia.utils import auto_int, g_repr
 
 
 class SimpleRMBA(UDSScanner):
     """Read memory by address"""
+
+    CATEGORY = "prims"
+    SUBCATEGORY = "uds"
+    COMMAND = "rmba"
+    SHORT_HELP = "read memory by address"
 
     def add_parser(self) -> None:
         self.parser.set_defaults(properties=False)
@@ -24,7 +29,9 @@ class SimpleRMBA(UDSScanner):
             help="The start address from which data should be read",
         )
         self.parser.add_argument(
-            "length", type=auto_int, help="The number of bytes which should be read"
+            "length",
+            type=auto_int,
+            help="The number of bytes which should be read",
         )
 
     async def main(self, args: Namespace) -> None:

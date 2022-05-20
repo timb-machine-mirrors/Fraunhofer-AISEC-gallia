@@ -4,14 +4,19 @@ from functools import partial
 
 from tabulate import tabulate
 
+from gallia.command import UDSScanner
 from gallia.uds.core.constants import CDTCSSubFuncs, DSCSubFuncs, UDSErrorCodes
 from gallia.uds.core.service import NegativeResponse
-from gallia.udscan.core import UDSScanner
 from gallia.utils import auto_int, g_repr
 
 
 class SimpleDTC(UDSScanner):
     """Read out UDS DTCs"""
+
+    CATEGORY = "prims"
+    SUBCATEGORY = "uds"
+    COMMAND = "dtc"
+    SHORT_HELP = "Read out UDS DTCs"
 
     def add_parser(self) -> None:
         self.parser.set_defaults(properties=False)

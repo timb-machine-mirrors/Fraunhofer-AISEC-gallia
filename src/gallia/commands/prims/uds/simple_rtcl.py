@@ -4,13 +4,18 @@ import sys
 from argparse import Namespace
 from typing import Union
 
+from gallia.command import UDSScanner
 from gallia.uds.core.service import NegativeResponse, RoutineControlResponse
-from gallia.udscan.core import UDSScanner
 from gallia.utils import auto_int, g_repr
 
 
 class SimpleRTCL(UDSScanner):
     """Start or stop a provided routine or request its results"""
+
+    CATEGORY = "prims"
+    SUBCATEGORY = "uds"
+    COMMAND = "rtcl"
+    SHORT_HELP = "interact with routine control"
 
     def add_parser(self) -> None:
         self.parser.set_defaults(properties=False)
@@ -22,7 +27,9 @@ class SimpleRTCL(UDSScanner):
             help="The session in which the requests are made",
         )
         self.parser.add_argument(
-            "routine_identifier", type=auto_int, help="The routine identifier"
+            "routine_identifier",
+            type=auto_int,
+            help="The routine identifier",
         )
         self.parser.add_argument(
             "--start",

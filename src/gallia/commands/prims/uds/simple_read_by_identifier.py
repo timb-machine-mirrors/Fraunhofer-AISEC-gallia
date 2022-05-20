@@ -1,22 +1,33 @@
 import sys
 from argparse import Namespace
 
+from gallia.command import UDSScanner
 from gallia.uds.core.service import NegativeResponse
-from gallia.udscan.core import UDSScanner
 from gallia.utils import auto_int, g_repr
 
 
 class ReadByIdentifier(UDSScanner):
     """cmd_readByIdentifier"""
 
+    CATEGORY = "prims"
+    SUBCATEGORY = "uds"
+    COMMAND = "rdbid"
+    SHORT_HELP = "read_data_by_identifier"
+
     def add_parser(self) -> None:
         self.parser.set_defaults(properties=False)
 
         self.parser.add_argument(
-            "--session", type=auto_int, default=0x01, help="set session perform test in"
+            "--session",
+            type=auto_int,
+            default=0x01,
+            help="set session perform test in",
         )
         self.parser.add_argument(
-            "--data-id", type=auto_int, default=0x1001, help="data Identified to read"
+            "--data-id",
+            type=auto_int,
+            default=0x1001,
+            help="data Identified to read",
         )
 
     async def main(self, args: Namespace) -> None:

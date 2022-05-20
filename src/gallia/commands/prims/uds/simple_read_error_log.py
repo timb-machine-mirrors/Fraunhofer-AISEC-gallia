@@ -1,13 +1,18 @@
 import asyncio
 from argparse import Namespace
 
+from gallia.command import UDSScanner
 from gallia.uds.core.service import NegativeResponse
-from gallia.udscan.core import UDSScanner
 from gallia.utils import auto_int, g_repr
 
 
 class SimpleReadErrorLog(UDSScanner):
     """read_error_log"""
+
+    COMMAND = "error-log"
+    CATEGORY = "prims"
+    SUBCATEGORY = "uds"
+    SHORT_HELP = "read_error_log"
 
     def add_parser(self) -> None:
         self.parser.set_defaults(properties=False)

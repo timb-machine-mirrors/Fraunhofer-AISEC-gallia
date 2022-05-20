@@ -3,25 +3,32 @@ import sys
 from argparse import Namespace
 from binascii import unhexlify
 
+from gallia.command import UDSScanner
 from gallia.uds.core.client import UDSRequestConfig
 from gallia.uds.core.constants import UDSErrorCodes
 from gallia.uds.core.service import NegativeResponse
 from gallia.uds.core.utils import uds_memory_parameters
-from gallia.udscan.core import UDSScanner
 from gallia.utils import auto_int, g_repr
 
 
-class ScanMemoryFunctions(UDSScanner):
-    SHORT_HELP = "Scan functions with direct access to memory"
-    HELP = """This scanner scans functions with direct access to memory.
-        Specifically, these are service 0x3d WriteMemoryByAddress, 0x34 RequestDownload
-        and 0x35 RequestUpload, which all share the same packet structure, except for
-        0x3d which requires an additional data field.
+class MemoryFunctionsScanner(UDSScanner):
+    """This scanner scans functions with direct access to memory.
+    Specifically, these are service 0x3d WriteMemoryByAddress, 0x34 RequestDownload
+    and 0x35 RequestUpload, which all share the same packet structure, except for
+    0x3d which requires an additional data field.
     """
+
+    SHORT_HELP = "scan services with direct access to memory"
+    CATEGORY = "scan"
+    SUBCATEGORY = "uds"
+    COMMAND = "memory"
 
     def add_parser(self) -> None:
         self.parser.add_argument(
-            "--session", type=auto_int, default=0x03, help="set session to perform test"
+            "--session",
+            type=auto_int,
+            default=0x03,
+            help="set session to perform test",
         )
         self.parser.add_argument(
             "--check-session",

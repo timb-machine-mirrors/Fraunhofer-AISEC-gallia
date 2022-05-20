@@ -9,14 +9,19 @@ from typing import Optional
 
 import aiofiles
 
+from gallia.command import UDSScanner
 from gallia.uds.core.client import UDSRequestConfig
 from gallia.uds.core.service import NegativeResponse
-from gallia.udscan.core import UDSScanner
 from gallia.utils import auto_int, g_repr
 
 
 class SaDumpSeeds(UDSScanner):
     """This scanner tries to enable ProgrammingSession and dump seeds for 12h."""
+
+    CATEGORY = "scan"
+    SUBCATEGORY = "uds"
+    COMMAND = "dump-seeds"
+    SHORT_HELP = "dump security access seeds"
 
     def __init__(self, parser: ArgumentParser) -> None:
         super().__init__(parser)

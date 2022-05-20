@@ -4,17 +4,22 @@ from argparse import BooleanOptionalAction, Namespace
 from binascii import unhexlify
 from typing import Any
 
+from gallia.command import UDSScanner
 from gallia.uds.core.client import UDSRequestConfig
 from gallia.uds.core.constants import UDSIsoServices
 from gallia.uds.core.exception import UDSException
 from gallia.uds.core.service import NegativeResponse, UDSResponse
 from gallia.uds.helpers import suggests_service_not_supported
-from gallia.udscan.core import UDSScanner
 from gallia.utils import ParseSkips, auto_int, g_repr
 
 
-class ScanServices(UDSScanner):
+class ServicesScanner(UDSScanner):
     """Iterate sessions and services and find endpoints"""
+
+    COMMAND = "services"
+    CATEGORY = "scan"
+    SUBCATEGORY = "uds"
+    SHORT_HELP = "find available UDS services"
 
     def add_parser(self) -> None:
         self.parser.add_argument(

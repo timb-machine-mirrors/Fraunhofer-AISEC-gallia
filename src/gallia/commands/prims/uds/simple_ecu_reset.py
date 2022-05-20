@@ -1,13 +1,18 @@
 import asyncio
 from argparse import Namespace
 
+from gallia.command import UDSScanner
 from gallia.uds.core.service import NegativeResponse, UDSResponse
-from gallia.udscan.core import UDSScanner
 from gallia.utils import auto_int, g_repr
 
 
 class SimpleECUReset(UDSScanner):
-    """Call the ecu_reset service"""
+    """call the ecu_reset service"""
+
+    CATEGORY = "prims"
+    SUBCATEGORY = "uds"
+    COMMAND = "ecu-reset"
+    SHORT_HELP = "call the ecu_reset services"
 
     def add_parser(self) -> None:
         self.parser.set_defaults(properties=False)

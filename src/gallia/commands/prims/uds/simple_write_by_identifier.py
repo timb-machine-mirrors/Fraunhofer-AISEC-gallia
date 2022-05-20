@@ -2,13 +2,18 @@ import binascii
 import sys
 from argparse import Namespace
 
+from gallia.command import UDSScanner
 from gallia.uds.core.service import NegativeResponse, UDSResponse
-from gallia.udscan.core import UDSScanner
 from gallia.utils import auto_int, g_repr
 
 
 class WriteByIdentifier(UDSScanner):
     """A simple scanner to talk to the write by identifier service"""
+
+    CATEGORY = "prims"
+    SUBCATEGORY = "uds"
+    COMMAND = "wdbid"
+    SHORT_HELP = "write_data_by_identifier"
 
     def add_parser(self) -> None:
         self.parser.set_defaults(properties=False)

@@ -9,6 +9,7 @@ import traceback
 from abc import ABC, abstractmethod
 from argparse import ArgumentParser, Namespace
 from asyncio import Task
+from copy import deepcopy
 from datetime import datetime, timezone
 from enum import Enum, IntEnum
 from importlib.metadata import EntryPoint, entry_points, version
@@ -18,7 +19,6 @@ from tempfile import gettempdir
 from typing import Optional, cast
 
 import aiofiles
-import argcomplete
 
 from gallia.db.db_handler import DBHandler
 from gallia.penlab import Dumpcap, PowerSupply, PowerSupplyURI
@@ -95,17 +95,15 @@ class GalliaBase(ABC):
     The main entry_point is `run()`.
     """
 
-    ID: str
+    CATEGORY: Optional[str]
+    COMMAND: str
     SHORT_HELP: str
+    SUBCATEGORY: Optional[str]
 
     def __init__(self, parser: ArgumentParser) -> None:
-        self.parser: ArgumentParser
         self.id = camel_to_snake(self.__class__.__name__)
         self.logger = Logger(component="gallia", flush=True)
-        self.db_handler: Optional[DBHandler] = None
-        self.parser = argparse.ArgumentParser(
-            description=self.description, formatter_class=Formatter
-        )
+        self.parser = parser
         self.add_class_parser()
         self.add_parser()
 
@@ -116,7 +114,7 @@ class GalliaBase(ABC):
         ...
 
     @abstractmethod
-    def run(self) -> int:
+    def run(self, args: Namespace) -> int:
         ...
 
 
@@ -129,10 +127,7 @@ class Script(GalliaBase, ABC):
     def main(self, args: Namespace) -> None:
         ...
 
-    def run(self) -> int:
-        argcomplete.autocomplete(self.parser)
-        args = self.parser.parse_args()
-
+    def run(self, args: Namespace) -> int:
         try:
             self.main(args)
             return 0
@@ -149,10 +144,7 @@ class AsyncScript(GalliaBase, ABC):
     async def main(self, args: Namespace) -> None:
         ...
 
-    def run(self) -> int:
-        argcomplete.autocomplete(self.parser)
-        args = self.parser.parse_args()
-
+    def run(self, args: Namespace) -> int:
         try:
             asyncio.run(self.main(args))
             return 0
@@ -180,6 +172,7 @@ class Scanner(GalliaBase, ABC):
     def __init__(self, parser: ArgumentParser) -> None:
         super().__init__(parser)
         self.artifacts_dir: Path
+        self.db_handler: Optional[DBHandler] = None
         self.power_supply: Optional[PowerSupply] = None
         self.dumpcap: Optional[Dumpcap] = None
 
@@ -210,7 +203,7 @@ class Scanner(GalliaBase, ABC):
 
         group = self.parser.add_argument_group("generic gallia arguments")
         group.add_argument(
-            "--data-dir",
+            "--artifacts-dir",
             default=os.environ.get("PENRUN_ARTIFACTS"),
             type=Path,
             help="Folder for artifacts",
@@ -335,14 +328,14 @@ class Scanner(GalliaBase, ABC):
                         f"Could not close the database connection properly: {g_repr(e)}"
                     )
 
-    def run(self) -> int:
-        argcomplete.autocomplete(self.parser)
-        args = self.parser.parse_args()
-
-        self.artifacts_dir = self.prepare_artifactsdir(args.data_dir)
+    def run(self, args: Namespace) -> int:
+        self.artifacts_dir = self.prepare_artifactsdir(args.artifacts_dir)
         self.logger.log_preamble(f"Storing artifacts at {self.artifacts_dir}")
+
+        argv = deepcopy(sys.argv)
+        argv[0] = Path(sys.argv[0]).name
         self.logger.log_preamble(
-            f'Starting "{sys.argv[0]}" ({version("gallia")}) with [{" ".join(sys.argv)}]'
+            f'Starting "{sys.argv[0]}" ({version("gallia")}) with [{" ".join(argv)}]'
         )
 
         try:
@@ -350,10 +343,6 @@ class Scanner(GalliaBase, ABC):
         except KeyboardInterrupt:
             self.logger.log_critical("ctrl+c received. Terminating…")
             return 128 + signal.SIGINT
-        finally:
-            self.logger.log_info(
-                f"The scan results are located at: {self.artifacts_dir}"
-            )
 
 
 class UDSScanner(Scanner):

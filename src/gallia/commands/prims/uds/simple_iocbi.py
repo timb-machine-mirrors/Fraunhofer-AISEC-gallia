@@ -2,13 +2,18 @@ import binascii
 import sys
 from argparse import Namespace
 
+from gallia.command import UDSScanner
 from gallia.uds.core.service import NegativeResponse
-from gallia.udscan.core import UDSScanner
 from gallia.utils import auto_int, g_repr
 
 
 class SimpleIOCBI(UDSScanner):
     """Input output control"""
+
+    CATEGORY = "prims"
+    SUBCATEGORY = "uds"
+    COMMAND = "IOCBI"
+    SHORT_HELP = "input output control"
 
     def add_parser(self) -> None:
         self.parser.set_defaults(properties=False)
@@ -20,7 +25,9 @@ class SimpleIOCBI(UDSScanner):
             help="The session in which the requests are made",
         )
         self.parser.add_argument(
-            "data_identifier", type=auto_int, help="The data identifier"
+            "data_identifier",
+            type=auto_int,
+            help="The data identifier",
         )
         self.parser.add_argument(
             "control_parameter",
