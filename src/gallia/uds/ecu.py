@@ -54,6 +54,7 @@ class ECU(UDSClient):
         self.power_supply = power_supply
         self.state = ECUState()
         self.db_handler: Optional[DBHandler] = None
+        self.implicit_logging = True
 
     async def connect(self) -> None:
         ...
@@ -242,7 +243,7 @@ class ECU(UDSClient):
         return sessions
 
     async def set_session(
-        self, level: int, config: Optional[UDSRequestConfig] = None
+        self, level: int, config: Optional[UDSRequestConfig] = None, use_db: bool = True,
     ) -> Union[service.NegativeResponse, service.DiagnosticSessionControlResponse]:
         config = config if config is not None else UDSRequestConfig()
 
@@ -250,6 +251,20 @@ class ECU(UDSClient):
             await self.set_session_pre(level, config=config)
 
         resp = await self.diagnostic_session_control(level, config=config)
+
+        if isinstance(resp, service.NegativeResponse) and self.db_handler is not None and use_db:
+            self.logger.log_debug(f'Could not switch to session. Trying with database transitions ...')
+
+            if self.db_handler is not None:
+                steps = await self.db_handler.get_session_transition(level)
+
+                self.logger.log_debug(f'Found the following steps in database: {steps}')
+
+                if steps is not None:
+                    for step in steps:
+                        await self.set_session(step, use_db=False)
+
+                    resp = await self.diagnostic_session_control(level, config=config)
 
         if not isinstance(resp, service.NegativeResponse) and not config.skip_hooks:
             await self.set_session_post(level, config=config)
@@ -384,7 +399,7 @@ class ECU(UDSClient):
             raise
         finally:
             try:
-                if self.db_handler is not None:
+                if self.implicit_logging and self.db_handler is not None:
                     log_mode = LogMode.implicit
 
                     if (
